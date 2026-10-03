@@ -3,116 +3,269 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WhatsApp Invite</title>
+  <title>RD Executive Series | VIP Referral</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-dark: #080d16;
+      --card-bg: #0f1726;
+      --card-border: #1e293b;
+      --gold-primary: #d4af37;
+      --gold-gradient: linear-gradient(135deg, #dfba47 0%, #c49925 100%);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 90vh;
+      min-height: 100vh;
       margin: 0;
-      background: #f0f2f5;
+      background: radial-gradient(circle at top, #141f33 0%, var(--bg-dark) 80%);
+      color: var(--text-main);
+      padding: 20px;
     }
+
     .card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 420px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.05);
+      width: 100%;
+      max-width: 440px;
+      padding: 36px 28px;
       text-align: center;
-      box-sizing: border-box;
+      position: relative;
     }
-    .input-group {
+
+    .logo-container {
+      margin-bottom: 20px;
+    }
+
+    .logo-container img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+    }
+
+    h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      color: var(--gold-primary);
+      margin: 0 0 8px 0;
+      text-transform: uppercase;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0 0 24px 0;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold-primary);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px 14px;
+      background: #080d16;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      font-size: 14px;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--gold-primary);
+    }
+
+    .phone-row {
       display: flex;
-      gap: 8px;
-      margin: 12px 0;
+      gap: 10px;
     }
-    select {
-      width: 38%;
-      padding: 12px 6px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 15px;
-      background: #fff;
+
+    .phone-row select {
+      width: 45%;
     }
-    input {
+
+    .phone-row input {
+      width: 55%;
+    }
+
+    button.btn-primary {
       width: 100%;
-      padding: 12px;
-      margin: 6px 0 12px 0;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      box-sizing: border-box;
-      font-size: 15px;
-    }
-    .phone-input {
-      margin: 0;
-      width: 62%;
-    }
-    button {
-      width: 100%;
-      background: #25D366;
-      color: white;
+      background: var(--gold-gradient);
+      color: #080d16;
       border: none;
-      padding: 13px;
-      font-weight: bold;
-      border-radius: 6px;
+      padding: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 13px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
-      margin-top: 6px;
+      margin-top: 10px;
+      transition: transform 0.1s, opacity 0.2s;
     }
-    button:disabled {
-      background: #9bd8b1;
+
+    button.btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    button.btn-primary:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
     }
+
     #result {
-      margin-top: 18px;
-      word-break: break-all;
       display: none;
-      background: #e7f8ee;
-      padding: 14px;
-      border-radius: 6px;
-      font-size: 14px;
+      margin-top: 24px;
+      background: rgba(212, 175, 55, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 16px;
+      border-radius: 8px;
       text-align: left;
     }
+
+    .link-box {
+      background: #080d16;
+      padding: 10px;
+      border-radius: 6px;
+      word-break: break-all;
+      font-size: 12px;
+      color: var(--gold-primary);
+      border: 1px dashed rgba(212, 175, 55, 0.4);
+      margin: 10px 0;
+      user-select: all;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-primary);
+      padding: 6px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .spinner {
+      border: 3px solid rgba(212, 175, 55, 0.15);
+      border-top: 3px solid var(--gold-primary);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 0.8s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <!-- VIEW 1: Generator Form -->
+  <!-- VIEW 1: Generator UI -->
   <div class="card" id="generatorCard">
-    <h2>Get Your Invite Link</h2>
-    <p style="color:#555; font-size: 14px;">Enter your details to generate your verified referral link:</p>
-    
-    <input type="text" id="fullName" placeholder="Full Name (e.g. Ron Dor)" required />
-
-    <div class="input-group">
-      <select id="countryCode">
-        <option value="+972">🇮🇱 +972</option>
-        <option value="+1">🇺🇸/🇨🇦 +1</option>
-        <option value="+44">🇬🇧 +44</option>
-        <option value="+33">🇫🇷 +33</option>
-        <option value="+49">🇩🇪 +49</option>
-        <option value="+91">🇮🇳 +91</option>
-        <option value="+971">🇦🇪 +971</option>
-        <option value="+34">🇪🇸 +34</option>
-      </select>
-      <input type="tel" id="phoneNumber" class="phone-input" placeholder="501234567" required />
+    <div class="logo-container">
+      <img src="redor-dial-master-180.png" alt="RD Logo" />
     </div>
 
-    <button id="genBtn" onclick="registerAndCreateLink()">Generate Link</button>
+    <h2>Executive Referral</h2>
+    <p class="subtitle">Generate your exclusive invitation link to the WhatsApp Channel.</p>
+
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="fullName" placeholder="e.g. Alexander Vance" required />
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number</label>
+      <div class="phone-row">
+        <select id="countryCode">
+          <option value="+972" selected>🇮🇱 +972</option>
+          <option value="+1">🇺🇸/🇨🇦 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+41">🇨🇭 +41</option>
+          <option value="+39">🇮🇹 +39</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+31">🇳🇱 +31</option>
+          <option value="+32">🇧🇪 +32</option>
+          <option value="+43">🇦🇹 +43</option>
+          <option value="+46">🇸🇪 +46</option>
+          <option value="+47">🇳🇴 +47</option>
+          <option value="+45">🇩🇰 +45</option>
+          <option value="+48">🇵🇱 +48</option>
+          <option value="+351">🇵🇹 +351</option>
+          <option value="+30">🇬🇷 +30</option>
+          <option value="+353">🇮🇪 +353</option>
+          <option value="+61">🇦🇺 +61</option>
+          <option value="+64">🇳🇿 +64</option>
+          <option value="+65">🇸🇬 +65</option>
+          <option value="+852">🇭🇰 +852</option>
+          <option value="+81">🇯🇵 +81</option>
+          <option value="+82">🇰🇷 +82</option>
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+55">🇧🇷 +55</option>
+          <option value="+52">🇲🇽 +52</option>
+          <option value="+27">🇿🇦 +27</option>
+          <option value="+966">🇸🇦 +966</option>
+          <option value="+974">🇶🇦 +974</option>
+          <option value="+357">🇨🇾 +357</option>
+          <option value="+380">🇺🇦 +380</option>
+          <option value="+40">🇷🇴 +40</option>
+          <option value="+36">🇭🇺 +36</option>
+          <option value="+420">🇨🇿 +420</option>
+          <option value="+90">🇹🇷 +90</option>
+        </select>
+        <input type="tel" id="phoneNumber" placeholder="501234567" required />
+      </div>
+    </div>
+
+    <button id="genBtn" class="btn-primary" onclick="generateLink()">Generate Link</button>
 
     <div id="result">
-      <p style="margin-top:0;"><strong>Your Personal Referral Link:</strong></p>
-      <span id="outputUrl" style="color:#117a37;"></span>
+      <div style="font-size: 11px; text-transform: uppercase; color: var(--gold-primary); font-weight: 600;">Your Dedicated Link</div>
+      <div class="link-box" id="outputUrl"></div>
+      <button class="copy-btn" onclick="copyLink()">Copy Link</button>
     </div>
   </div>
 
-  <!-- VIEW 2: Auto Redirect -->
+  <!-- VIEW 2: Directing UI -->
   <div class="card" id="redirectCard" style="display:none;">
-    <h2>Connecting to WhatsApp...</h2>
-    <p>Opening channel in a moment.</p>
+    <div class="logo-container">
+      <img src="redor-dial-master-180.png" alt="RD Logo" />
+    </div>
+    <h2>Connecting...</h2>
+    <p class="subtitle">Forwarding to the RD WhatsApp Executive Channel.</p>
+    <div class="spinner"></div>
   </div>
 
   <script>
@@ -122,50 +275,58 @@
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
 
-    // REDIRECT HANDLER
+    // 1. INCOMING VISITOR LOGIC
     if (ref) {
       document.getElementById('generatorCard').style.display = 'none';
       document.getElementById('redirectCard').style.display = 'block';
 
-      // Send log to Google Sheets in background
-      fetch(`${SCRIPT_URL}?ref=${encodeURIComponent(ref)}`, { mode: 'no-cors' })
-        .finally(() => {
-          window.location.href = CHANNEL_URL;
-        });
+      // Send payload to Google Sheets without blocking execution
+      const img = new Image();
+      img.src = `${SCRIPT_URL}?ref=${encodeURIComponent(ref)}&t=${Date.now()}`;
 
+      // Instant redirect
       setTimeout(() => {
         window.location.href = CHANNEL_URL;
-      }, 700);
+      }, 450);
 
-    // REGISTRATION & GENERATOR HANDLER
+    // 2. REFERRAL LINK GENERATOR LOGIC
     } else {
-      async function registerAndCreateLink() {
+      function generateLink() {
         const name = document.getElementById('fullName').value.trim();
         const code = document.getElementById('countryCode').value;
-        const rawPhone = document.getElementById('phoneNumber').value.trim().replace(/^0+/, ''); // strip leading zero
-        
+        const rawPhone = document.getElementById('phoneNumber').value.trim().replace(/^0+/, '').replace(/\D/g, '');
+
         if (!name) return alert('Please enter your full name.');
-        if (!rawPhone || rawPhone.length < 7) return alert('Please enter a valid phone number.');
+        if (!rawPhone || rawPhone.length < 6) return alert('Please enter a valid phone number.');
 
         const fullPhone = code + rawPhone;
-        
-        // Create an ID: name + last 4 digits of phone (e.g. ron-dor-4567)
         const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
         const phoneSuffix = fullPhone.slice(-4);
         const refId = `${cleanName}-${phoneSuffix}`;
 
         const btn = document.getElementById('genBtn');
         btn.disabled = true;
-        btn.innerText = "Registering...";
+        btn.innerText = "Generating...";
 
-        // Register to Google Sheet
-        const registerUrl = `${SCRIPT_URL}?action=register&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(fullPhone)}&refId=${encodeURIComponent(refId)}`;
-        
-        fetch(registerUrl, { mode: 'no-cors' }).finally(() => {
+        // Fire request to Google Apps Script via Image beacon (100% reliable across all origins)
+        const logImg = new Image();
+        const registerUrl = `${SCRIPT_URL}?action=register&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(fullPhone)}&refId=${encodeURIComponent(refId)}&t=${Date.now()}`;
+        logImg.src = registerUrl;
+
+        // Render generated link immediately
+        setTimeout(() => {
           const finalUrl = window.location.origin + window.location.pathname + '?ref=' + encodeURIComponent(refId);
           document.getElementById('outputUrl').innerText = finalUrl;
           document.getElementById('result').style.display = 'block';
-          btn.innerText = "Link Generated!";
+          btn.disabled = false;
+          btn.innerText = "Generate Link";
+        }, 300);
+      }
+
+      function copyLink() {
+        const text = document.getElementById('outputUrl').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          alert('Link copied to clipboard!');
         });
       }
     }

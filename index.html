@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Invite</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 90vh;
+      margin: 0;
+      background: #f0f2f5;
+    }
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      background: #25D366;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 18px;
+      word-break: break-all;
+      display: none;
+      background: #e7f8ee;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="generatorCard">
+    <h2>Generate Invite Link</h2>
+    <p style="color:#555; font-size: 14px;">
+      Enter your name or handle to create your custom invite link:
+    </p>
+    <input type="text" id="refInput" placeholder="e.g. Ron-Dor" />
+    <button onclick="makeLink()">Generate Link</button>
+    <div id="result">
+      <p><strong>Share this link:</strong></p>
+      <span id="outputUrl"></span>
+    </div>
+  </div>
+
+  <div class="card" id="redirectCard" style="display:none;">
+    <h2>Redirecting to WhatsApp...</h2>
+    <p>Opening channel in a moment.</p>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxplZLE8ksR1yywRSEUiPAQ9nzgAI-reKK3e7zFeQOHiV84R6eSvkhyJuyC2NK9HbJO2Q/exec";
+    const CHANNEL_URL = "https://whatsapp.com/channel/0029Vb8UFNfJENy6f1veHv1h";
+
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+
+    if (ref) {
+      document.getElementById('generatorCard').style.display = 'none';
+      document.getElementById('redirectCard').style.display = 'block';
+
+      fetch(`${SCRIPT_URL}?ref=${encodeURIComponent(ref)}`, { mode: 'no-cors' })
+        .finally(() => {
+          window.location.href = CHANNEL_URL;
+        });
+
+      setTimeout(() => {
+        window.location.href = CHANNEL_URL;
+      }, 800);
+    } else {
+      function makeLink() {
+        const name = document.getElementById('refInput').value.trim().replace(/\s+/g, '-');
+        if (!name) return alert('Please enter a name');
+
+        const link = window.location.origin + window.location.pathname + '?ref=' + encodeURIComponent(name);
+        document.getElementById('outputUrl').innerText = link;
+        document.getElementById('result').style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

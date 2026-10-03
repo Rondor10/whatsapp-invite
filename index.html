@@ -22,55 +22,96 @@
       width: 90%;
       max-width: 420px;
       text-align: center;
+      box-sizing: border-box;
+    }
+    .input-group {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    select {
+      width: 38%;
+      padding: 12px 6px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 15px;
+      background: #fff;
     }
     input {
       width: 100%;
       padding: 12px;
-      margin: 12px 0;
+      margin: 6px 0 12px 0;
       border: 1px solid #ddd;
       border-radius: 6px;
       box-sizing: border-box;
-      font-size: 16px;
+      font-size: 15px;
+    }
+    .phone-input {
+      margin: 0;
+      width: 62%;
     }
     button {
       width: 100%;
       background: #25D366;
       color: white;
       border: none;
-      padding: 12px;
+      padding: 13px;
       font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
+      margin-top: 6px;
+    }
+    button:disabled {
+      background: #9bd8b1;
+      cursor: not-allowed;
     }
     #result {
       margin-top: 18px;
       word-break: break-all;
       display: none;
       background: #e7f8ee;
-      padding: 12px;
+      padding: 14px;
       border-radius: 6px;
       font-size: 14px;
+      text-align: left;
     }
   </style>
 </head>
 <body>
 
+  <!-- VIEW 1: Generator Form -->
   <div class="card" id="generatorCard">
-    <h2>Generate Invite Link</h2>
-    <p style="color:#555; font-size: 14px;">
-      Enter your name or handle to create your custom invite link:
-    </p>
-    <input type="text" id="refInput" placeholder="e.g. Ron-Dor" />
-    <button onclick="makeLink()">Generate Link</button>
+    <h2>Get Your Invite Link</h2>
+    <p style="color:#555; font-size: 14px;">Enter your details to generate your verified referral link:</p>
+    
+    <input type="text" id="fullName" placeholder="Full Name (e.g. Ron Dor)" required />
+
+    <div class="input-group">
+      <select id="countryCode">
+        <option value="+972">🇮🇱 +972</option>
+        <option value="+1">🇺🇸/🇨🇦 +1</option>
+        <option value="+44">🇬🇧 +44</option>
+        <option value="+33">🇫🇷 +33</option>
+        <option value="+49">🇩🇪 +49</option>
+        <option value="+91">🇮🇳 +91</option>
+        <option value="+971">🇦🇪 +971</option>
+        <option value="+34">🇪🇸 +34</option>
+      </select>
+      <input type="tel" id="phoneNumber" class="phone-input" placeholder="501234567" required />
+    </div>
+
+    <button id="genBtn" onclick="registerAndCreateLink()">Generate Link</button>
+
     <div id="result">
-      <p><strong>Share this link:</strong></p>
-      <span id="outputUrl"></span>
+      <p style="margin-top:0;"><strong>Your Personal Referral Link:</strong></p>
+      <span id="outputUrl" style="color:#117a37;"></span>
     </div>
   </div>
 
+  <!-- VIEW 2: Auto Redirect -->
   <div class="card" id="redirectCard" style="display:none;">
-    <h2>Redirecting to WhatsApp...</h2>
+    <h2>Connecting to WhatsApp...</h2>
     <p>Opening channel in a moment.</p>
   </div>
 
@@ -81,10 +122,12 @@
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
 
+    // REDIRECT HANDLER
     if (ref) {
       document.getElementById('generatorCard').style.display = 'none';
       document.getElementById('redirectCard').style.display = 'block';
 
+      // Send log to Google Sheets in background
       fetch(`${SCRIPT_URL}?ref=${encodeURIComponent(ref)}`, { mode: 'no-cors' })
         .finally(() => {
           window.location.href = CHANNEL_URL;
@@ -92,15 +135,38 @@
 
       setTimeout(() => {
         window.location.href = CHANNEL_URL;
-      }, 800);
-    } else {
-      function makeLink() {
-        const name = document.getElementById('refInput').value.trim().replace(/\s+/g, '-');
-        if (!name) return alert('Please enter a name');
+      }, 700);
 
-        const link = window.location.origin + window.location.pathname + '?ref=' + encodeURIComponent(name);
-        document.getElementById('outputUrl').innerText = link;
-        document.getElementById('result').style.display = 'block';
+    // REGISTRATION & GENERATOR HANDLER
+    } else {
+      async function registerAndCreateLink() {
+        const name = document.getElementById('fullName').value.trim();
+        const code = document.getElementById('countryCode').value;
+        const rawPhone = document.getElementById('phoneNumber').value.trim().replace(/^0+/, ''); // strip leading zero
+        
+        if (!name) return alert('Please enter your full name.');
+        if (!rawPhone || rawPhone.length < 7) return alert('Please enter a valid phone number.');
+
+        const fullPhone = code + rawPhone;
+        
+        // Create an ID: name + last 4 digits of phone (e.g. ron-dor-4567)
+        const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+        const phoneSuffix = fullPhone.slice(-4);
+        const refId = `${cleanName}-${phoneSuffix}`;
+
+        const btn = document.getElementById('genBtn');
+        btn.disabled = true;
+        btn.innerText = "Registering...";
+
+        // Register to Google Sheet
+        const registerUrl = `${SCRIPT_URL}?action=register&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(fullPhone)}&refId=${encodeURIComponent(refId)}`;
+        
+        fetch(registerUrl, { mode: 'no-cors' }).finally(() => {
+          const finalUrl = window.location.origin + window.location.pathname + '?ref=' + encodeURIComponent(refId);
+          document.getElementById('outputUrl').innerText = finalUrl;
+          document.getElementById('result').style.display = 'block';
+          btn.innerText = "Link Generated!";
+        });
       }
     }
   </script>
